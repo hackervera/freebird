@@ -3,7 +3,7 @@ var webpack = require('webpack');
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
 
 module.exports = {
-    entry: "./src/index.js",
+    entry: "./js/index.js",
     output: {
       path: __dirname,
       filename: "bundle.js"
@@ -14,8 +14,9 @@ module.exports = {
         ],
         loaders: [
             { test: /\.json$/, loader: "json" },
-            { test: /\.js$/, loader: "babel", include: path.resolve('./src') },
-            { test: /\.scss$/,loaders: ["style", "css", "sass"], include: path.resolve('./src') },
+            { test: /\.js$/, loader: "babel", include: path.resolve('./js') },
+            { test: /\.scss$/,loaders: ["style", "css", "sass"], include: path.resolve('./scss') },
+            { test: /\.(png|jpg)$/, loader: 'url?limit=8192', include: path.resolve('./images') },
         ]
     },
     resolve: {

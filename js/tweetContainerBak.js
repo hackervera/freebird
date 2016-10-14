@@ -11,7 +11,7 @@ var friends;
 var room;
 var tweets = [];
 
-var config = toml.parse('../config.toml')
+var config = toml.parse(require('raw!../config.toml'))
 
 window.rawSdk = require("matrix-js-sdk");
 window.client = rawSdk.createClient({baseUrl: config.base_url})
