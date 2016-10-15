@@ -10,7 +10,7 @@ export default ({client, onLogin}) => {
         <input type="text" id="username" placeholder="Username"/>
         <input type="password" id="password" placeholder="Password"/>
         <button>Login</button>
-        <p className="password-info">Enter your Matrix credentials. Password is not stored anywhere on server. It stays completely in browser</p>
+        <p className="password-info"><b>This is ALPHA software</b> Enter your Matrix credentials. Password is not stored anywhere on server. It stays completely in browser</p>
   </form>
   );
 }

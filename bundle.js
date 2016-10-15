@@ -52113,7 +52113,12 @@
 	    _react2['default'].createElement(
 	      'p',
 	      { className: 'password-info' },
-	      'Enter your Matrix credentials. Password is not stored anywhere on server. It stays completely in browser'
+	      _react2['default'].createElement(
+	        'b',
+	        null,
+	        'This is ALPHA software'
+	      ),
+	      ' Enter your Matrix credentials. Password is not stored anywhere on server. It stays completely in browser'
 	    )
 	  );
 	};
@@ -66687,6 +66692,10 @@
 	
 	var _TweetContainer2 = _interopRequireDefault(_TweetContainer);
 	
+	var _underscore = __webpack_require__(333);
+	
+	var _underscore2 = _interopRequireDefault(_underscore);
+	
 	var Tweets = function Tweets(_ref) {
 	  var tweets = _ref.tweets;
 	  var client = _ref.client;
@@ -66702,10 +66711,17 @@
 	      'Loading data...'
 	    );
 	  } else {
+	    tweets = _underscore2['default'].sortBy(tweets, function (tweet) {
+	      return tweet.event.origin_server_ts;
+	    }).reverse();
+	    tweets = _underscore2['default'].uniq(tweets, function (tweet) {
+	      return tweet.event.event_id;
+	    });
+	
 	    tweetComponents = tweets.map(function (tweet) {
 	      //console.log(tweet.event.content.body)
 	      return _react2['default'].createElement(_TweetContainer2['default'], { tweet: tweet });
-	    }).reverse();
+	    });
 	  }
 	  return _react2['default'].createElement(
 	    'div',
@@ -66869,6 +66885,7 @@
 	        data["inReplyTo"] = selectedTweet;
 	      }
 	      client.sendMessage(_config2['default'].roomId, data);
+	      dispatch((0, _actions.selectTweet)(null));
 	    },
 	    onClearReply: function onClearReply() {
 	      dispatch((0, _actions.selectTweet)(null));

@@ -25,6 +25,7 @@ const mapDispatchToProps = (dispatch) => {
         data["inReplyTo"] = selectedTweet
       }
       client.sendMessage(config.roomId, data)
+      dispatch(selectTweet(null))
     },
     onClearReply: () => {
       dispatch(selectTweet(null))
