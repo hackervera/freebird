@@ -7,9 +7,10 @@ export default ({client, onLogin}) => {
         $("#login-form").css("display", "none");
         onLogin({username: $("#username").val(), password: $("#password").val()}, client);
       }} id="login-form">
-      <input type="text" id="username"/>
-      <input type="password" id="password"/>
-      <button>Login</button>
+        <input type="text" id="username" placeholder="Username"/>
+        <input type="password" id="password" placeholder="Password"/>
+        <button>Login</button>
+        <p className="password-info">Enter your Matrix credentials. Password is not stored anywhere on server. It stays completely in browser</p>
   </form>
   );
 }

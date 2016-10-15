@@ -52043,13 +52043,25 @@
 	  };
 	};
 	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+	
 	  return {
 	    onLogin: function onLogin(credentials, client) {
 	      client.loginWithPassword(credentials.username, credentials.password).done(function (d) {
 	        var newClient = _matrixJsSdk2['default'].createClient({ baseUrl: _config2['default'].baseUrl, accessToken: d.access_token, userId: d.user_id });
-	        newClient.on("Room.timeline", (0, _timeline2['default'])(newClient, function (d) {
+	        var timelineFunc = (0, _timeline2['default'])(newClient, function (d) {
 	          dispatch((0, _actions.addTweet)(d));
-	        }));
+	        });
+	        newClient.on("Room.timeline", timelineFunc);
+	        newClient.on("sync", function (state, prevState, data) {
+	          if (state == "PREPARED") {
+	            var room = newClient.getRoom(_config2['default'].roomId);
+	            newClient.scrollback(room).done(function (room) {
+	              room.timeline.map(function (event) {
+	                timelineFunc(event, room);
+	              });
+	            });
+	          }
+	        });
 	        newClient.startClient();
 	        newClient.joinRoom(_config2['default'].roomId);
 	        dispatch((0, _actions.updateClient)(newClient));
@@ -52091,12 +52103,17 @@
 	        (0, _jquery2['default'])("#login-form").css("display", "none");
 	        onLogin({ username: (0, _jquery2['default'])("#username").val(), password: (0, _jquery2['default'])("#password").val() }, client);
 	      }, id: 'login-form' },
-	    _react2['default'].createElement('input', { type: 'text', id: 'username' }),
-	    _react2['default'].createElement('input', { type: 'password', id: 'password' }),
+	    _react2['default'].createElement('input', { type: 'text', id: 'username', placeholder: 'Username' }),
+	    _react2['default'].createElement('input', { type: 'password', id: 'password', placeholder: 'Password' }),
 	    _react2['default'].createElement(
 	      'button',
 	      null,
 	      'Login'
+	    ),
+	    _react2['default'].createElement(
+	      'p',
+	      { className: 'password-info' },
+	      'Enter your Matrix credentials. Password is not stored anywhere on server. It stays completely in browser'
 	    )
 	  );
 	};
@@ -66619,6 +66636,10 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
+	var _config = __webpack_require__(314);
+	
+	var _config2 = _interopRequireDefault(_config);
+	
 	var mapStateToProps = function mapStateToProps(state) {
 	  //console.log(state)
 	  return {
@@ -66824,6 +66845,10 @@
 	
 	var _config2 = _interopRequireDefault(_config);
 	
+	var _jquery = __webpack_require__(318);
+	
+	var _jquery2 = _interopRequireDefault(_jquery);
+	
 	var mapStateToProps = function mapStateToProps(state) {
 	  return {
 	    selectedTweet: state.selectedTweet,
@@ -66835,6 +66860,7 @@
 	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 	  return {
 	    onReplySend: function onReplySend(messageText, client, selectedTweet) {
+	      (0, _jquery2['default'])("#replyText").val("");
 	      var data = {
 	        body: messageText,
 	        msgtype: "cat.tyler.twitter"
@@ -66951,6 +66977,10 @@
 	
 	var _reactRouterRedux = __webpack_require__(261);
 	
+	var _jquery = __webpack_require__(318);
+	
+	var _jquery2 = _interopRequireDefault(_jquery);
+	
 	var mapStateToProps = function mapStateToProps(state) {
 	  return {
 	    selectedTweet: state.selectedTweet
@@ -66959,6 +66989,9 @@
 	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 	  return {
 	    onSelectTweet: function onSelectTweet(eventId) {
+	      (0, _jquery2['default'])("#replyText").val("");
+	      (0, _jquery2['default'])("#replyText").focus();
+	      window.scrollTo(0, 0);
 	      dispatch((0, _actions.selectTweet)(eventId));
 	    },
 	    onViewConversation: function onViewConversation(eventId) {
@@ -68727,7 +68760,7 @@
 	
 	
 	// module
-	exports.push([module.id, ".tweets {\n  height: 100vh;\n  overflow-y: scroll; }\n\n.send-tweet {\n  max-width: 500px;\n  margin-left: auto;\n  margin-right: auto; }\n\n.tweet {\n  border-style: solid;\n  margin: 5px;\n  min-width: 500px;\n  min-height: 200px;\n  padding-left: 20px;\n  max-width: 500px;\n  margin-left: auto;\n  margin-right: auto; }\n\n.avatar {\n  max-width: 50px;\n  vertical-align: middle;\n  padding-right: 20px; }\n\n.reply-tweet {\n  border-style: solid;\n  max-width: 500px;\n  margin-bottom: 10px;\n  margin-left: auto;\n  margin-right: auto;\n  padding-left: 10px; }\n\n.reply {\n  text-align: right;\n  padding-right: 20px;\n  margin-top: 20px; }\n  .reply a {\n    cursor: pointer;\n    color: cadetblue;\n    margin-left: 40px; }\n\n.replies {\n  width: 100%; }\n\n.new-tweet {\n  border-style: solid; }\n\ntextarea {\n  width: 500px;\n  height: 100px; }\n", ""]);
+	exports.push([module.id, ".password-info {\n  margin-left: 20px; }\n\n.send-tweet {\n  max-width: 500px;\n  margin-left: auto;\n  margin-right: auto; }\n\n.tweet {\n  border-style: solid;\n  margin: 5px;\n  min-width: 500px;\n  min-height: 200px;\n  padding-left: 20px;\n  max-width: 500px;\n  margin-left: auto;\n  margin-right: auto; }\n\n.avatar {\n  max-width: 50px;\n  vertical-align: middle;\n  padding-right: 20px; }\n\n.reply-tweet {\n  border-style: solid;\n  max-width: 500px;\n  margin-bottom: 10px;\n  margin-left: auto;\n  margin-right: auto;\n  padding-left: 10px; }\n\n.reply {\n  text-align: right;\n  padding-right: 20px;\n  margin-top: 20px; }\n  .reply a {\n    cursor: pointer;\n    color: cadetblue;\n    margin-left: 40px; }\n\n.replies {\n  width: 100%; }\n\n.new-tweet {\n  border-style: solid; }\n\ntextarea {\n  width: 500px;\n  height: 100px; }\n", ""]);
 	
 	// exports
 

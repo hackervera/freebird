@@ -2,7 +2,7 @@ import { connect } from 'react-redux'
 import Tweets from './Tweets'
 import {addTweet} from './actions'
 import React from 'react'
-
+import config from './config'
 
 const mapStateToProps = (state) => {
   //console.log(state)

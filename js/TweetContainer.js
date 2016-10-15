@@ -3,7 +3,7 @@ import Tweet from './Tweet'
 import {selectTweet, viewConversation} from './actions'
 import React from 'react'
 import { push } from 'react-router-redux';
-
+import $ from 'jquery'
 
 const mapStateToProps = (state) => {
   return {
@@ -13,6 +13,9 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     onSelectTweet: (eventId) => {
+      $("#replyText").val("")
+      $("#replyText").focus()
+      window.scrollTo(0,0)
       dispatch(selectTweet(eventId))
     },
     onViewConversation: (eventId) => {

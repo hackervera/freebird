@@ -3,6 +3,7 @@ import TweetResponse from './TweetResponse'
 import {selectTweet} from './actions'
 import React from 'react'
 import config from './config'
+import $ from 'jquery'
 
 const mapStateToProps = (state) => {
   return {
@@ -15,6 +16,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     onReplySend: (messageText, client, selectedTweet) => {
+      $("#replyText").val("")
       var data = {
         body: messageText,
         msgtype: "cat.tyler.twitter"
