@@ -1,20 +1,26 @@
 import React from 'react'
 import $ from 'jquery'
-export default ({selectedTweet, client}) => {
+export default ({selectedTweet, client, onReplySend, tweets, onClearReply}) => {
+  var replyMsg = <div/>
   if(selectedTweet){
-    return (
+    replyMsg = (
       <div>
-      <div>Now responding to eventId: {selectedTweet} <input id="replyText" type='text'/></div>
-      <div>
-        <button onClick={() =>
-          client.sendMessage("!xtYgwAVUadJnJUydMa:matrix.org", {
-            body: $("#replyText").val(),
-            msgtype: "cat.tyler.twitter",
-            inReplyTo: selectedTweet
-          })
-        }>Submit</button></div>
+        Now responding to eventId: {selectedTweet}
+        <button onClick={ () => onClearReply()}>X</button>
       </div>
-
+    )
+  }
+  if(tweets.length > 0){
+    return (
+      <div className="send-tweet">
+        {replyMsg}
+        <div><textarea id="replyText" /></div>
+        <div>
+          <button onClick={() =>
+              onReplySend($("#replyText").val(), client, selectedTweet)
+            }>Send Message</button>
+          </div>
+        </div>
     )
   } else {
     return <div/>

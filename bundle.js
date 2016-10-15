@@ -66688,7 +66688,7 @@
 	  }
 	  return _react2['default'].createElement(
 	    'div',
-	    null,
+	    { className: 'tweets' },
 	    _react2['default'].createElement(
 	      'div',
 	      null,
@@ -66731,6 +66731,7 @@
 	  var referenceMsg = _react2['default'].createElement('div', null);
 	  if (tweet.event.content.inReplyTo) {
 	    var reference = tweet.room.findEventById(tweet.event.content.inReplyTo);
+	    var viewConvo;
 	    if (reference) {
 	      referenceMsg = _react2['default'].createElement(
 	        'div',
@@ -66742,15 +66743,15 @@
 	          reference.event.content.body
 	        ),
 	        ' ',
-	        reference.sender.userId,
-	        _react2['default'].createElement(
-	          'a',
-	          { onClick: function () {
-	              _reactRouter.browserHistory.push("/conversation");
-	              onViewConversation(tweet.event.event_id);
-	            }, 'class': 'view-conversation' },
-	          ' View Conversation'
-	        )
+	        reference.sender.userId
+	      );
+	      viewConvo = _react2['default'].createElement(
+	        'a',
+	        { onClick: function () {
+	            _reactRouter.browserHistory.push("/conversation");
+	            onViewConversation(tweet.event.event_id);
+	          }, className: 'view-conversation' },
+	        ' View Conversation'
 	      );
 	    }
 	  }
@@ -66780,12 +66781,13 @@
 	    _react2['default'].createElement(
 	      'div',
 	      { className: 'reply' },
+	      viewConvo,
 	      _react2['default'].createElement(
 	        'a',
 	        { onClick: function () {
 	            onSelectTweet(tweet.event.event_id);
 	          } },
-	        'Reply'
+	        ' Reply'
 	      )
 	    )
 	  );
@@ -66818,20 +66820,37 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
+	var _config = __webpack_require__(314);
+	
+	var _config2 = _interopRequireDefault(_config);
+	
 	var mapStateToProps = function mapStateToProps(state) {
 	  return {
 	    selectedTweet: state.selectedTweet,
-	    client: state.client
+	    client: state.client,
+	    tweets: state.tweets
 	  };
 	};
 	
 	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 	  return {
-	    oneReplySend: function oneReplySend(messageText) {}
+	    onReplySend: function onReplySend(messageText, client, selectedTweet) {
+	      var data = {
+	        body: messageText,
+	        msgtype: "cat.tyler.twitter"
+	      };
+	      if (selectedTweet) {
+	        data["inReplyTo"] = selectedTweet;
+	      }
+	      client.sendMessage(_config2['default'].roomId, data);
+	    },
+	    onClearReply: function onClearReply() {
+	      dispatch((0, _actions.selectTweet)(null));
+	    }
 	  };
 	};
 	
-	exports['default'] = (0, _reactRedux.connect)(mapStateToProps)(_TweetResponse2['default']);
+	exports['default'] = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_TweetResponse2['default']);
 	module.exports = exports['default'];
 
 /***/ },
@@ -66857,18 +66876,35 @@
 	exports['default'] = function (_ref) {
 	  var selectedTweet = _ref.selectedTweet;
 	  var client = _ref.client;
+	  var onReplySend = _ref.onReplySend;
+	  var tweets = _ref.tweets;
+	  var onClearReply = _ref.onClearReply;
 	
+	  var replyMsg = _react2['default'].createElement('div', null);
 	  if (selectedTweet) {
-	    return _react2['default'].createElement(
+	    replyMsg = _react2['default'].createElement(
 	      'div',
 	      null,
+	      'Now responding to eventId: ',
+	      selectedTweet,
+	      _react2['default'].createElement(
+	        'button',
+	        { onClick: function () {
+	            return onClearReply();
+	          } },
+	        'X'
+	      )
+	    );
+	  }
+	  if (tweets.length > 0) {
+	    return _react2['default'].createElement(
+	      'div',
+	      { className: 'send-tweet' },
+	      replyMsg,
 	      _react2['default'].createElement(
 	        'div',
 	        null,
-	        'Now responding to eventId: ',
-	        selectedTweet,
-	        ' ',
-	        _react2['default'].createElement('input', { id: 'replyText', type: 'text' })
+	        _react2['default'].createElement('textarea', { id: 'replyText' })
 	      ),
 	      _react2['default'].createElement(
 	        'div',
@@ -66876,13 +66912,9 @@
 	        _react2['default'].createElement(
 	          'button',
 	          { onClick: function () {
-	              return client.sendMessage("!xtYgwAVUadJnJUydMa:matrix.org", {
-	                body: (0, _jquery2['default'])("#replyText").val(),
-	                msgtype: "cat.tyler.twitter",
-	                inReplyTo: selectedTweet
-	              });
+	              return onReplySend((0, _jquery2['default'])("#replyText").val(), client, selectedTweet);
 	            } },
-	          'Submit'
+	          'Send Message'
 	        )
 	      )
 	    );
@@ -66988,15 +67020,15 @@
 	    if (reply) {
 	      var reference = tweet.room.findEventById(tweet.event.content.inReplyTo);
 	      if (reference) {
-	        //console.log("found reference")
+	        console.log("found reference");
 	        return nextTweet(reference, [].concat(_toConsumableArray(references), [reference]));
 	      } else {
-	        //console.log("reference not found")
+	        console.log("reference not found");
 	        return references;
 	      }
 	    } else {
-	      //console.log("no reply found")
-	      return [].concat(_toConsumableArray(references), [tweet]);
+	      console.log("no reply found");
+	      return references;
 	    }
 	  })();
 	};
@@ -67053,7 +67085,7 @@
 	  });
 	  return _react2['default'].createElement(
 	    'div',
-	    null,
+	    { className: 'replies' },
 	    tweetComponents
 	  );
 	};
@@ -68695,7 +68727,7 @@
 	
 	
 	// module
-	exports.push([module.id, ".tweet {\n  border-style: solid;\n  margin: 5px;\n  min-width: 500px;\n  min-height: 200px;\n  padding-left: 20px;\n  max-width: 500px;\n  float: left; }\n\n.avatar {\n  max-width: 50px;\n  vertical-align: middle;\n  padding-right: 20px; }\n\n.reply-tweet {\n  border-style: solid; }\n\n.reply {\n  float: right;\n  padding-right: 20px; }\n  .reply a {\n    cursor: pointer;\n    color: cadetblue; }\n\n.view-conversation {\n  cursor: pointer; }\n\n.new-tweet {\n  border-style: solid; }\n", ""]);
+	exports.push([module.id, ".tweets {\n  height: 100vh;\n  overflow-y: scroll; }\n\n.send-tweet {\n  max-width: 500px;\n  margin-left: auto;\n  margin-right: auto; }\n\n.tweet {\n  border-style: solid;\n  margin: 5px;\n  min-width: 500px;\n  min-height: 200px;\n  padding-left: 20px;\n  max-width: 500px;\n  margin-left: auto;\n  margin-right: auto; }\n\n.avatar {\n  max-width: 50px;\n  vertical-align: middle;\n  padding-right: 20px; }\n\n.reply-tweet {\n  border-style: solid;\n  max-width: 500px;\n  margin-bottom: 10px;\n  margin-left: auto;\n  margin-right: auto;\n  padding-left: 10px; }\n\n.reply {\n  text-align: right;\n  padding-right: 20px;\n  margin-top: 20px; }\n  .reply a {\n    cursor: pointer;\n    color: cadetblue;\n    margin-left: 40px; }\n\n.replies {\n  width: 100%; }\n\n.new-tweet {\n  border-style: solid; }\n\ntextarea {\n  width: 500px;\n  height: 100px; }\n", ""]);
 	
 	// exports
 

@@ -2,20 +2,32 @@ import { connect } from 'react-redux'
 import TweetResponse from './TweetResponse'
 import {selectTweet} from './actions'
 import React from 'react'
+import config from './config'
 
 const mapStateToProps = (state) => {
   return {
     selectedTweet: state.selectedTweet,
-    client: state.client
+    client: state.client,
+    tweets: state.tweets
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    oneReplySend: (messageText) => {
-
+    onReplySend: (messageText, client, selectedTweet) => {
+      var data = {
+        body: messageText,
+        msgtype: "cat.tyler.twitter"
+      }
+      if(selectedTweet){
+        data["inReplyTo"] = selectedTweet
+      }
+      client.sendMessage(config.roomId, data)
+    },
+    onClearReply: () => {
+      dispatch(selectTweet(null))
     }
   }
 }
 
-export default connect(mapStateToProps)(TweetResponse)
+export default connect(mapStateToProps, mapDispatchToProps)(TweetResponse)

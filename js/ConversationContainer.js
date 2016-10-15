@@ -16,15 +16,15 @@ const nextTweet = (tweet, references = [tweet]) => {
   if(reply){
     var reference = tweet.room.findEventById(tweet.event.content.inReplyTo);
     if(reference){
-      //console.log("found reference")
+      console.log("found reference")
       return nextTweet(reference, [...references, reference])
     } else {
-      //console.log("reference not found")
+      console.log("reference not found")
       return references
     }
   } else {
-    //console.log("no reply found")
-    return [...references, tweet]
+    console.log("no reply found")
+    return references
   }
 }
 

@@ -8,5 +8,5 @@ export default ({tweets}) => {
     //console.log(tweet.event.content.body)
     return <Reply tweet={tweet}/>
   })
-  return <div>{tweetComponents}</div>
+  return <div className="replies">{tweetComponents}</div>
 }

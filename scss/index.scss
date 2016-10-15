@@ -1,3 +1,13 @@
+.tweets {
+  height: 100vh;
+  overflow-y: scroll;
+}
+.send-tweet {
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 .tweet {
   border-style: solid;
   margin: 5px;
@@ -5,8 +15,8 @@
   min-height: 200px;
   padding-left: 20px;
   max-width: 500px;
-  float: left;
-
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .avatar {
@@ -17,20 +27,28 @@
 
 .reply-tweet {
   border-style: solid;
+  max-width: 500px;
+  margin-bottom: 10px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 10px;
 }
 
 .reply {
-  float: right;
+  text-align: right;
   padding-right: 20px;
+  margin-top: 20px;
   a {
     cursor: pointer;
     color: cadetblue;
+    margin-left: 40px;
   }
 }
 
-.view-conversation {
-  cursor: pointer;
+.replies {
+  width: 100%
 }
+
 
 .new-tweet {
   border-style: solid;
@@ -39,6 +57,7 @@
   }
 }
 
-#tweet-container {
-
+textarea {
+  width: 500px;
+  height: 100px;
 }

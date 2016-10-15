@@ -17,7 +17,7 @@ const Tweets = ({tweets, client, onAddTweet}) => {
     }).reverse()
   }
   return (
-    <div>
+    <div className="tweets">
     <div><TweetResponseContainer/></div>
     <div>{tweetComponents}</div>
     </div>

@@ -7,15 +7,18 @@ const Tweet = ({visit, tweet, onSelectTweet, onViewConversation}) => {
   var referenceMsg = <div/>;
   if(tweet.event.content.inReplyTo){
     var reference = tweet.room.findEventById(tweet.event.content.inReplyTo);
+    var viewConvo;
     if(reference){
       referenceMsg = (
         <div>
           In reply to <b>{reference.event.content.body}</b> {reference.sender.userId}
-          <a onClick={() => {
-            browserHistory.push("/conversation")
-            onViewConversation(tweet.event.event_id)
-          }} class="view-conversation"> View Conversation</a>
         </div>
+      )
+      viewConvo = (
+        <a onClick={() => {
+          browserHistory.push("/conversation")
+          onViewConversation(tweet.event.event_id)
+        }} className="view-conversation"> View Conversation</a>
       )
     }
   }
@@ -24,12 +27,14 @@ const Tweet = ({visit, tweet, onSelectTweet, onViewConversation}) => {
       <div className="innerTweet">
         <p>
           <img src={tweet.avatar} className="avatar"/>
-          {tweet.sender.name} . {tweet.sender.userId} . {tweet.room.name}</p>
+          {tweet.sender.name} . {tweet.sender.userId} . {tweet.room.name}
+        </p>
         <p>{tweet.event.content.body}</p>
         {referenceMsg}
       </div>
       <div className="reply">
-        <a onClick={()=>{onSelectTweet(tweet.event.event_id)}}>Reply</a>
+        {viewConvo}
+        <a onClick={()=>{onSelectTweet(tweet.event.event_id)}}> Reply</a>
       </div>
     </div>
   );
