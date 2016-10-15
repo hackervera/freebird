@@ -1,29 +1,23 @@
+import config from './config'
 export default function(client, cb){
   var timeline = function(event, room, toStartOfTimeline  ) {
-    var friends = client.getAccountData("cat.tyler.friends").event.content.friends
     if (toStartOfTimeline) {
-        return; // don't print paginated results
+      return;
     }
     if (event.getType() !== "m.room.message") {
-        //console.log(event.event.content);
-        //console.log(event.event.type);
-
-        //console.log(event.event.content)
-        return; // only print messages
-
+      return;
     }
-    console.log(event.getSender());
-    if(friends.indexOf(event.getSender()) != -1){
+    //console.log(event.getSender());
+    if(room.roomId == config.roomId){
         client.getProfileInfo(event.sender.userId).done(function(profile){
           event["avatar"] = client.mxcUrlToHttp(profile.avatar_url);
           event["room"] = room;
-          //tweets.push(event)
           cb(event)
         })
-        console.log(
-        //the room name will update with m.room.name events automatically
-        "(%s) %s :: %s", room.name, event.getSender(), JSON.stringify(event.getContent())
-      );
+      //   console.log(
+      //   //the room name will update with m.room.name events automatically
+      //   "(%s) %s :: %s", room.name, event.getSender(), JSON.stringify(event.getContent())
+      // );
     }
   }
   return timeline;

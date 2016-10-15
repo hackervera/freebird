@@ -8,20 +8,25 @@ import { syncHistoryWithStore, routerReducer } from 'react-router-redux'
 import reducers from './reducers'
 import App from './App'
 import TweetsContainer from './TweetsContainer'
+import ConversationContainer from './ConversationContainer'
+
 const store = createStore(
   combineReducers({
     ...reducers,
     routing: routerReducer
   })
 )
+window.store = store;
 const history = syncHistoryWithStore(browserHistory, store)
-window.store = store.getState();
+
+
+
 ReactDOM.render(
   <Provider store={store}>
     <Router history={browserHistory}>
       <Route path="/" component={App}>
         <IndexRoute component={TweetsContainer}/>
-
+        <Route path="conversation" component={ConversationContainer}/>
       </Route>
     </Router>
   </Provider>

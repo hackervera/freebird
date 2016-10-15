@@ -6,6 +6,15 @@ import React from 'react'
 const mapStateToProps = (state) => {
   return {
     selectedTweet: state.selectedTweet,
+    client: state.client
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    oneReplySend: (messageText) => {
+
+    }
   }
 }
 

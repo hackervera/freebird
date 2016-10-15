@@ -5,7 +5,7 @@ import React from 'react'
 
 
 const mapStateToProps = (state) => {
-  console.log(state)
+  //console.log(state)
   return {
     tweets: state.tweets,
     client: state.client
@@ -18,11 +18,6 @@ const mapDispatchToProps = (dispatch) => {
     }
   }
 }
-
-
-
-
-
 
 const TweetsContainer = connect(mapStateToProps, mapDispatchToProps)(Tweets)
 export default TweetsContainer

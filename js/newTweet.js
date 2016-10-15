@@ -12,7 +12,7 @@ module.exports = React.createClass({
     this.setState({message: ev.target.value})
   },
   onClick: function(){
-    console.log(this.state.message);
+    //console.log(this.state.message);
     client.sendMessage("!xtYgwAVUadJnJUydMa:matrix.org", {
       msgtype: "cat.tyler.twitter",
       body: this.state.message,
@@ -21,7 +21,7 @@ module.exports = React.createClass({
   },
   render: function() {
       if(this.state){
-        console.log(this.state);
+        //console.log(this.state);
         return (
           <div className="new-tweet">
             <p>Sending reply to {this.state.tweet.sender.name} in reply to {this.state.tweet.event.event_id}</p>

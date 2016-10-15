@@ -9,14 +9,14 @@ module.exports = React.createClass({
   componentDidMount: function(){
     var self = this;
     this.props.store.subscribe(function(){
-      console.log("state update")
+      //console.log("state update")
       self.setState({scene: self.props.store.getState().scene});
     })
   },
 
   render: function() {
       var scene = <div>Empty Scene</div>;
-      console.log(this.state.scene);
+      //console.log(this.state.scene);
       if(this.state && this.state.scene){
         if(this.state.scene == "conversation"){
           scene = <Conversation/>

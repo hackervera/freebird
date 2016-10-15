@@ -1,31 +1,45 @@
-
-import toml from 'toml'
 import rawSdk from "matrix-js-sdk";
-var config = toml.parse(require('raw!../config.toml'))
-var sdkClient = rawSdk.createClient({baseUrl: config.base_url})
+import config from './config'
+var sdkClient = rawSdk.createClient({baseUrl: config.baseUrl})
+
 const selectedTweet = (state = null, action) => {
   if(action.type == "SELECT_TWEET"){
-    console.log(action)
+    //console.log(action)
     return action.eventId
   } else {
     return state
   }
 }
+
+const conversationId = (state = null, action) => {
+  if(action.type == "VIEW_CONVERSATION"){
+    return action.eventId
+  }
+  return state
+}
+
 const client = (state = sdkClient, action) => {
   if(action.type == "UPDATE_CLIENT") {
-
+    return action.client
   }
   return state;
+}
+
+const credentials = (state = null, action) => {
+  if(action.type == "LOGIN"){
+    return state.credentials
+  }
+  return state
 }
 
 
 const tweets = (state = [], action) => {
   if(action.type == "ADD_TWEET") {
-    state.push(action.tweet)
-    return state
+    //console.log("UPDATING STATE")
+    return [...state, action.tweet]
   } else {
     return state;
   }
 }
 
-export default {selectedTweet, tweets, client}
+export default {selectedTweet, conversationId, client, tweets}
