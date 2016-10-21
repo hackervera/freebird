@@ -25,3 +25,5 @@ export function addTweet(tweet) {
 export const login = (credentials) => {
   return {type: "LOGIN", credentials}
 }
+
+export const updateScrollback = () => ({type: "UPDATE_SCROLLBACK"})

@@ -1,6 +1,7 @@
 import config from './config'
 export default function(client, cb){
   var timeline = function(event, room, toStartOfTimeline  ) {
+    console.log(event);
     if (toStartOfTimeline) {
       return;
     }

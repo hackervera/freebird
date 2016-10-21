@@ -32,6 +32,12 @@ const credentials = (state = null, action) => {
   return state
 }
 
+const scrollback = (state = false, action) => {
+  if(action.type == "UPDATE_SCROLLBACK"){
+    return true
+  }
+  return state
+}
 
 const tweets = (state = [], action) => {
   if(action.type == "ADD_TWEET") {
@@ -42,4 +48,4 @@ const tweets = (state = [], action) => {
   }
 }
 
-export default {selectedTweet, conversationId, client, tweets}
+export default {selectedTweet, conversationId, client, tweets, scrollback}

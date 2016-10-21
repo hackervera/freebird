@@ -9,33 +9,68 @@ var sdkClient = rawSdk.createClient({baseUrl: config.baseUrl})
 import timeline from './timeline'
 
 
+const timelineFunc = (client, dispatch) => {
+  return timeline(client, function(d){
+    dispatch(addTweet(d))
+  });
+}
+
 const mapStateToProps = (state) => {
   return {
-    client: state.client
+    client: state.client,
+    scrollback: state.scrollback
   }
 }
+
+const setupClient = (client, dispatch) => {
+  var scrollback = false
+  client.joinRoom(config.roomId).done(room => {
+    //console.log(room)
+    // client.scrollback(room).done(room => {
+    //   //console.log(room.timeline);
+    //   return room.timeline.map(event => timelineFunc(client, dispatch)(event, room));
+    // });
+  });
+  client.on("Room.timeline", (event, room, toStartOfTimeline) => {
+    console.log("timeline")
+    timelineFunc(client, dispatch)(event, room);
+  });
+  client.on("Room", function(room){
+    console.log("joined room")
+    console.log(room)
+  });
+  client.on("sync", (state, prev, data) => {
+    let rooms = client.getRooms()
+    if(rooms.length > 0 && !scrollback){
+      scrollback = true
+      let room = client.getRoom(config.roomId)
+      client.scrollback(room, 100).done(room => {
+        //console.log(room.timeline);
+        return room.timeline.map(event => timelineFunc(client, dispatch)(event, room));
+      });
+    }
+    console.log([state,prev,data])
+    console.log(client.getRooms())
+    console.log("^ rooms")
+  });
+  client.startClient();
+}
+
 const mapDispatchToProps = (dispatch) => {
 
   return {
+    loginAsGuest: (client) => {
+      client.registerGuest().done((d) => {
+        var newClient = rawSdk.createClient({baseUrl: config.baseUrl, accessToken: d.access_token, userId: d.user_id})
+        newClient.setGuest(true)
+        setupClient(newClient, dispatch)
+        dispatch(updateClient(newClient))
+      })
+    },
     onLogin: (credentials, client) => {
       client.loginWithPassword(credentials.username, credentials.password).done(function(d){
         var newClient = rawSdk.createClient({baseUrl: config.baseUrl, accessToken: d.access_token, userId: d.user_id})
-        var timelineFunc = timeline(newClient, function(d){
-          dispatch(addTweet(d))
-        });
-        newClient.on("Room.timeline", timelineFunc);
-        newClient.on("sync", (state, prevState, data) => {
-          if(state == "PREPARED"){
-            var room = newClient.getRoom(config.roomId);
-            newClient.scrollback(room).done((room) => {
-              room.timeline.map((event) => {
-                timelineFunc(event, room)
-              })
-            });
-          }
-        })
-        newClient.startClient()
-        newClient.joinRoom(config.roomId)
+        setupClient(newClient, dispatch)
         dispatch(updateClient(newClient))
       });
     }

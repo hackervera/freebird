@@ -9,7 +9,8 @@ import reducers from './reducers'
 import App from './App'
 import TweetsContainer from './TweetsContainer'
 import ConversationContainer from './ConversationContainer'
-
+import rawSdk from "matrix-js-sdk";
+window.sdk = rawSdk;
 const store = createStore(
   combineReducers({
     ...reducers,
