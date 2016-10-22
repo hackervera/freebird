@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router'
-import {browserHistory} from 'react-router';
+import {browserHistory, hashHistory} from 'react-router';
 
 
 const Tweet = ({visit, tweet, onSelectTweet, onViewConversation}) => {
@@ -16,8 +16,7 @@ const Tweet = ({visit, tweet, onSelectTweet, onViewConversation}) => {
       )
       viewConvo = (
         <a onClick={() => {
-          browserHistory.push("/conversation")
-          onViewConversation(tweet.event.event_id)
+          hashHistory.replace("conversation/" + tweet.event.event_id)
         }} className="view-conversation"> View Conversation</a>
       )
     }
@@ -27,7 +26,7 @@ const Tweet = ({visit, tweet, onSelectTweet, onViewConversation}) => {
       <div className="innerTweet">
         <p>
           <img src={tweet.avatar} className="avatar"/>
-          {tweet.sender.name} . {tweet.sender.userId} . {tweet.room.name}
+          {tweet.sender.name} . <a onClick={() => hashHistory.replace("user/"+tweet.sender.userId)}> {tweet.sender.userId}</a> . {tweet.room.name}
         </p>
         <p>{tweet.event.content.body}</p>
         {referenceMsg}

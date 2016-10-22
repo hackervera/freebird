@@ -5,7 +5,7 @@ export default ({tweet}) => {
       <div>
         <p>
           <img src={tweet.avatar} className="avatar"/>
-          {tweet.sender.name} . {tweet.sender.userId} . {tweet.room.name}</p>
+          {tweet.sender.name} . {tweet.sender.userId} . {tweet.room && tweet.room.name}</p>
         <p>{tweet.event.content.body}</p>
       </div>
     </div>

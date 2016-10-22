@@ -1,6 +1,7 @@
 import { connect } from 'react-redux'
 import Conversation from './Conversation'
 import {selectTweet, viewConversation} from './actions'
+import {browserHistory, hashHistory} from 'react-router';
 import React from 'react'
 import _ from 'underscore'
 import TweetContainer from './TweetContainer'
@@ -28,8 +29,8 @@ const nextTweet = (tweet, references = [tweet]) => {
   }
 }
 
-const mapStateToProps = (state) => {
-  var tweet = conversationTweet(state.tweets, state.conversationId)
+const mapStateToProps = (state, ownProps) => {
+  var tweet = conversationTweet(state.tweets, ownProps.params.id)
   nextTweet(tweet)
   return {
     conversationTweet: state.conversationTweet,
