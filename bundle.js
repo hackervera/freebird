@@ -66915,6 +66915,19 @@
 	      _react2['default'].createElement(
 	        'p',
 	        null,
+	        '  ',
+	        _react2['default'].createElement(
+	          'a',
+	          { onClick: function () {
+	              return _reactRouter.hashHistory.replace("conversation/" + tweet.event.event_id);
+	            } },
+	          ' ',
+	          tweet.event.event_id
+	        )
+	      ),
+	      _react2['default'].createElement(
+	        'p',
+	        null,
 	        tweet.event.content.body
 	      ),
 	      referenceMsg
@@ -68744,11 +68757,14 @@
 	};
 	
 	var mapStateToProps = function mapStateToProps(state, ownProps) {
+	  var tweets = [];
 	  var tweet = conversationTweet(state.tweets, ownProps.params.id);
-	  nextTweet(tweet);
+	  if (tweet) {
+	    tweets = nextTweet(tweet);
+	  }
 	  return {
 	    conversationTweet: state.conversationTweet,
-	    tweets: nextTweet(tweet)
+	    tweets: tweets
 	  };
 	};
 	var mapDispatchToProps = function mapDispatchToProps(dispatch) {

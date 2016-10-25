@@ -30,11 +30,14 @@ const nextTweet = (tweet, references = [tweet]) => {
 }
 
 const mapStateToProps = (state, ownProps) => {
+  var tweets = [];
   var tweet = conversationTweet(state.tweets, ownProps.params.id)
-  nextTweet(tweet)
+  if(tweet){
+    tweets = nextTweet(tweet)
+  }
   return {
     conversationTweet: state.conversationTweet,
-    tweets: nextTweet(tweet)
+    tweets: tweets
   }
 }
 const mapDispatchToProps = (dispatch) => {

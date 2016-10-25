@@ -28,6 +28,7 @@ const Tweet = ({visit, tweet, onSelectTweet, onViewConversation}) => {
           <img src={tweet.avatar} className="avatar"/>
           {tweet.sender.name} . <a onClick={() => hashHistory.replace("user/"+tweet.sender.userId)}> {tweet.sender.userId}</a> . {tweet.room.name}
         </p>
+        <p>  <a onClick={() => hashHistory.replace("conversation/"+tweet.event.event_id)}> {tweet.event.event_id}</a></p>
         <p>{tweet.event.content.body}</p>
         {referenceMsg}
       </div>
